@@ -1,101 +1,271 @@
 <!DOCTYPE html>
-
 <html lang="zh-CN">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>XPENG 2026 全系精准算单 (完全体版)</title>
-
     <style>
-
         :root { --main-color: #00bfb3; --bg-color: #f4f7f6; }
-
         body { font-family: -apple-system, sans-serif; background: var(--bg-color); color: #333; margin: 0; padding: 20px; }
-
         .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 24px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
-
         h2 { text-align: center; color: var(--main-color); margin-top: 0; font-size: 24px; }
-
         .disclaimer { text-align: center; font-size: 12px; color: #999; margin-bottom: 25px; }
-
         .form-group { margin-bottom: 18px; }
-
         label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 14px; color: #444; }
-
         select, input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; background: #f9f9f9; font-weight: 600; color: #111; }
-
         select:focus, input:focus { border-color: var(--main-color); outline: none; background: #fff; }
-
         .row { display: flex; gap: 12px; }
-
         .row .form-group { flex: 1; }
-
         button { width: 100%; background: linear-gradient(135deg, #00bfb3, #008c85); color: white; border: none; padding: 14px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
-
         button:active { transform: scale(0.99); }
-
         .result-box { margin-top: 25px; background: #1e252b; color: #fff; padding: 20px; border-radius: 12px; display: none; }
-
         .result-box h3 { margin-top: 0; color: var(--main-color); border-bottom: 1px solid #33414d; padding-bottom: 8px; font-size: 18px; }
-
         .result-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #2c3740; font-size: 15px; }
-
         .result-row:last-child { border-bottom: none; }
-
         .highlight { color: var(--main-color); font-weight: bold; font-size: 18px; }
-
         .danger { color: #ff5a5f; font-weight: bold; }
-
         .tax-tip { font-size: 12px; color: #888; text-align: right; margin-top: 4px; display: block;}
-
     </style>
-
 </head>
-
 <body>
 
-
-
 <div class="container">
-
     <h2>26款小鹏全系精确算单工具</h2>
-
     <div class="disclaimer">【DCC实战完全体】已补齐G9，内置26年减半购置税新规</div>
 
+    <div class="row">
+        <div class="form-group">
+            <label>26款在售车型</label>
+            <select id="vehicle" onchange="updateVersion()">
+                <option value="m03">MONA M03</option>
+                <option value="p7n">小鹏 P7N (26款新P7)</option>
+                <option value="p7plus">小鹏 P7+ (纯电/增程)</option>
+                <option value="g7">小鹏 G7 (纯电/增程)</option>
+                <option value="g6">小鹏 G6 (纯电/增程)</option>
+                <option value="g9">小鹏 G9 (纯电旗舰)</option>
+                <option value="x9_ev">小鹏 X9 (纯电)</option>
+                <option value="x9_range">小鹏 X9 (超级增程)</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>版本配置</label>
+            <select id="version" onchange="calculate()"></select>
+        </div>
+    </div>
 
+    <div class="form-group">
+        <label>专属轮毂/外观选配</label>
+        <select id="wheel" onchange="calculate()"></select>
+    </div>
 
     <div class="row">
-
         <div class="form-group">
-
-            <label>26款在售车型</label>
-
-            <select id="vehicle" onchange="updateVersion()">
-
-                <option value="m03">MONA M03</option>
-
-                <option value="p7n">小鹏 P7N (26款新P7)</option>
-
-                <option value="p7plus">小鹏 P7+ (纯电/增程)</option>
-
-                <option value="g7">小鹏 G7 (纯电/增程)</option>
-
-                <option value="g6">小鹏 G6 (纯电/增程)</option>
-
-                <option value="g9">小鹏 G9 (纯电旗舰)</option>
-
-                <option value="x9_ev">小鹏 X9 (纯电)</option>
-
-                <option value="x9_range">小鹏 X9 (超级增程)</option>
-
+            <label>报废/置换政策</label>
+            <select id="tradeIn" onchange="calculate()">
+                <option value="0">新购（无置换）</option>
+                <option value="5000">本品/他品置换 (-5,000元)</option>
+                <option value="10000">国家报废更新 (-10,000元)</option>
             </select>
-
         </div>
+        <div class="form-group">
+            <label>店端现金减免 (元)</label>
+            <input type="number" id="cashReduction" value="0" placeholder="限时下定抵扣" oninput="calculate()">
+        </div>
+    </div>
 
+    <div class="row">
+        <div class="form-group">
+            <label>保险预估 (元)</label>
+            <input type="number" id="insurance" value="5500" oninput="calculate()">
+        </div>
+        <div class="form-group">
+            <label>上牌综合费 (元)</label>
+            <input type="number" id="regFee" value="500" oninput="calculate()">
+        </div>
+    </div>
+
+    <button onclick="calculate()">生成实战落地价</button>
+
+    <div class="result-box" id="resultBox">
+        <h3>📊 购车财务看板</h3>
+        <div class="result-row">
+            <span>官方指导价：</span>
+            <span id="resOfficialPrice">0 元</span>
+        </div>
+        <div class="result-row">
+            <span>专属选配加成：</span>
+            <span>+ <span id="resOptionPrice">0</span> 元</span>
+        </div>
+        <div class="result-row">
+            <span>综合优惠减免：</span>
+            <span class="danger">- <span id="resDiscount">0</span> 元</span>
+        </div>
+        <div class="result-row" style="background: rgba(255, 90, 95, 0.1); padding: 8px; border-radius: 6px;">
+            <span>【裸车开票价】：</span>
+            <span class="danger" id="resBarePrice">0 元</span>
+        </div>
+        
+        <div class="result-row" style="margin-top: 10px;">
+            <span>保险及上牌费：</span>
+            <span>+ <span id="resFees">0</span> 元</span>
+        </div>
+        <div class="result-row">
+            <span>购置税 (26年新规)：</span>
+            <span>+ <span class="danger" id="resTax">0</span> 元</span>
+        </div>
+        <span class="tax-tip">*(减半征收，超免税额度部分实缴)*</span>
+        
+        <div class="result-row" style="background: rgba(0,191,179,0.15); padding: 15px 10px; border-radius: 8px; margin-top: 15px;">
+            <span style="font-weight: bold; line-height: 28px;">全款落地总价预估：</span>
+            <span class="highlight" id="resTotalPrice" style="font-size: 24px;">0 元</span>
+        </div>
+    </div>
+</div>
+
+<script>
+// 核心数据库
+const vehicleData = {
+    m03: [
+        { name: "540 长续航 Plus", price: 119800 },
+        { name: "510 长续航 Max", price: 129800 },
+        { name: "640 超长续航 Plus", price: 129800 },
+        { name: "610 超长续航 Max", price: 139800 },
+        { name: "510 长续航 Ultra SE", price: 141800 },
+        { name: "610 超长续航 Ultra SE", price: 151800 }
+    ],
+    p7n: [
+        { name: "702 Max (后驱)", price: 203800 },
+        { name: "820 Max (后驱)", price: 223800 },
+        { name: "750 四驱 Max (双电机)", price: 243800 },
+        { name: "750 四驱鹏翼 Ultra", price: 301800 }
+    ],
+    p7plus: [
+        { name: "615 Max 旗舰版 (纯电)", price: 186800 },
+        { name: "725 Max 旗舰版 (纯电)", price: 196800 },
+        { name: "1550 Max 科技版 (增程)", price: 186900 },
+        { name: "1550 Max 旗舰版 (增程)", price: 196800 }
+    ],
+    g7: [
+        { name: "602 Max 旗舰版 (纯电)", price: 195800 },
+        { name: "702 Max 旗舰版 (纯电)", price: 205800 },
+        { name: "1704 Max 科技版 (增程)", price: 195800 },
+        { name: "1704 Max 旗舰版 (增程)", price: 205800 }
+    ],
+    g6: [
+        { name: "625 Max 科技版 (纯电)", price: 176800 },
+        { name: "625 Max 旗舰版 (纯电)", price: 186800 },
+        { name: "1704 Max (增程版)", price: 186800 }
+    ],
+    g9: [
+        { name: "625 Max", price: 248800 },
+        { name: "725 Max", price: 258800 },
+        { name: "680 四驱 Max", price: 278800 }
+    ],
+    x9_ev: [
+        { name: "665 Max", price: 309800 },
+        { name: "650 Ultra SE", price: 321800 },
+        { name: "650 Ultra", price: 329800 },
+        { name: "750 Ultra", price: 349800 },
+        { name: "710 四驱 Ultra", price: 369800 } 
+    ],
+    x9_range: [
+        { name: "1602 Max", price: 309800 },
+        { name: "1602 Ultra SE", price: 321800 },
+        { name: "1602 Ultra", price: 329800 }
+    ]
+};
+
+// 轮毂专属库
+const wheelData = {
+    p7n: [
+        { name: "标配 20寸低风阻轮毂", price: 0 },
+        { name: "选装 21寸锻造运动轮毂", price: 8000 }
+    ],
+    p7plus: [
+        { name: "标配 19寸轮毂", price: 0 },
+        { name: "选装 20寸轮毂", price: 6000 }
+    ],
+    g9: [
+        { name: "标配 19寸星型轮毂", price: 0 },
+        { name: "选装 21寸多辐轮毂", price: 6000 }
+    ],
+    x9_ev: [
+        { name: "标配 19寸星芒轮毂", price: 0 },
+        { name: "选装 20寸轮毂", price: 8000 }
+    ],
+    x9_range: [
+        { name: "标配 19寸星芒轮毂", price: 0 },
+        { name: "选装 20寸轮毂", price: 8000 }
+    ],
+    default: [
+        { name: "标配原厂轮毂/外观", price: 0 },
+        { name: "其他付费选装包", price: 6000 }
+    ]
+};
+
+function updateVersion() {
+    const vehicleSelect = document.getElementById("vehicle").value;
+    
+    // 1. 刷新配置
+    const versionSelect = document.getElementById("version");
+    versionSelect.innerHTML = ""; 
+    vehicleData[vehicleSelect].forEach((item) => {
+        let opt = document.createElement("option");
+        opt.value = item.price;
+        opt.innerText = `${item.name} (${item.price.toLocaleString()}元)`;
+        versionSelect.appendChild(opt);
+    });
+
+    // 2. 刷新专属轮毂
+    const wheelSelect = document.getElementById("wheel");
+    wheelSelect.innerHTML = "";
+    const wheels = wheelData[vehicleSelect] || wheelData["default"];
+    wheels.forEach((item) => {
+        let opt = document.createElement("option");
+        opt.value = item.price;
+        opt.innerText = `${item.name} (+${item.price.toLocaleString()}元)`;
+        wheelSelect.appendChild(opt);
+    });
+
+    calculate();
+}
+
+updateVersion();
+
+function calculate() {
+    const officialPrice = parseInt(document.getElementById("version").value) || 0;
+    const wheelPrice = parseInt(document.getElementById("wheel").value) || 0;
+    const tradeInDiscount = parseInt(document.getElementById("tradeIn").value) || 0;
+    const cashReduction = parseInt(document.getElementById("cashReduction").value) || 0;
+    const insurancePrice = parseInt(document.getElementById("insurance").value) || 0;
+    const regFee = parseInt(document.getElementById("regFee").value) || 0;
+
+    const optionTotal = wheelPrice;
+    const discountTotal = tradeInDiscount + cashReduction;
+    
+    const barePrice = Math.max(0, officialPrice + optionTotal - discountTotal);
+    
+    // 购置税核心引擎（超30万基础线开征）
+    const taxBase = barePrice / 1.13;
+    const normalTax = taxBase * 0.10;
+    const taxReduction = Math.min(normalTax * 0.5, 15000); 
+    const taxPrice = Math.max(0, Math.round(normalTax - taxReduction)); 
+
+    const totalPrice = barePrice + taxPrice + insurancePrice + regFee;
+
+    document.getElementById("resOfficialPrice").innerText = officialPrice.toLocaleString() + " 元";
+    document.getElementById("resOptionPrice").innerText = optionTotal.toLocaleString();
+    document.getElementById("resDiscount").innerText = discountTotal.toLocaleString();
+    document.getElementById("resBarePrice").innerText = barePrice.toLocaleString() + " 元";
+    document.getElementById("resFees").innerText = (insurancePrice + regFee).toLocaleString();
+    document.getElementById("resTax").innerText = taxPrice.toLocaleString();
+    document.getElementById("resTotalPrice").innerText = totalPrice.toLocaleString() + " 元";
+    
+    document.getElementById("resultBox").style.display = "block";
+}
+</script>
+</body>
+</html>
         <div class="form-group">
 
             <label>版本配置</label>
