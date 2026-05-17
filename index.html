@@ -3,92 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>长沙吃货省钱基地 - 每日外卖福利</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>XPENG 2026 全系精准算单 (含P7N)</title>
     <style>
-        .gradient-bg {
-            background: linear-gradient(180deg, #FF5E3A 0%, #FF9500 100%);
-        }
+        :root { --main-color: #00bfb3; --bg-color: #f4f7f6; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg-color); color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 24px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        h2 { text-align: center; color: var(--main-color); margin-top: 0; font-size: 24px; }
+        .disclaimer { text-align: center; font-size: 12px; color: #999; margin-bottom: 25px; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 14px; color: #444; }
+        select, input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; background: #f9f9f9; font-weight: 600; color: #111; }
+        select:focus, input:focus { border-color: var(--main-color); outline: none; background: #fff; }
+        .row { display: flex; gap: 12px; }
+        .row .form-group { flex: 1; }
+        button { width: 100%; background: linear-gradient(135deg, #00bfb3, #008c85); color: white; border: none; padding: 14px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        button:active { transform: scale(0.99); }
+        .result-box { margin-top: 25px; background: #1e252b; color: #fff; padding: 20px; border-radius: 12px; display: none; }
+        .result-box h3 { margin-top: 0; color: var(--main-color); border-bottom: 1px solid #33414d; padding-bottom: 8px; font-size: 18px; }
+        .result-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #2c3740; font-size: 15px; }
+        .result-row:last-child { border-bottom: none; }
+        .highlight { color: var(--main-color); font-weight: bold; font-size: 18px; }
+        .danger { color: #ff5a5f; font-weight: bold; }
+        .tax-tip { font-size: 12px; color: #888; text-align: right; margin-top: 4px; display: block;}
     </style>
 </head>
-<body class="bg-gray-50 font-sans antialiased min-h-screen pb-12">
+<body>
 
-    <div class="gradient-bg text-white text-center py-8 px-4 rounded-b-[2rem] shadow-lg">
-        <h1 class="text-2xl font-black tracking-wide mb-2">🔥 长沙吃货干饭福利社 🔥</h1>
-        <p class="text-sm opacity-90 font-medium">先领券·再报名·每顿饭最高能省 100%</p>
-        <div class="mt-4 inline-block bg-white text-orange-600 text-xs font-bold px-3 py-1 rounded-full shadow-sm animate-pulse">
-            ✨ 今日特价已更新
+<div class="container">
+    <h2>26款小鹏全系精确算单工具</h2>
+    <div class="disclaimer">【内测版】已纠正P7N四驱错误，内置减半购置税新规</div>
+
+    <div class="row">
+        <div class="form-group">
+            <label>26款在售车型</label>
+            <select id="vehicle" onchange="updateVersion()">
+                <option value="m03">MONA M03</option>
+                <option value="p7n">小鹏 P7N (26款新P7)</option>
+                <option value="p7plus">小鹏 P7+ (纯电/增程)</option>
+                <option value="g7">小鹏 G7 (纯电/增程)</option>
+                <option value="g6">小鹏 G6 (纯电/增程)</option>
+                <option value="x9_ev">小鹏 X9 (纯电)</option>
+                <option value="x9_range">小鹏 X9 (超级增程)</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>版本配置</label>
+            <select id="version" onchange="calculate()"></select>
         </div>
     </div>
 
-    <div class="max-w-md mx-auto px-4 mt-6 space-y-4">
-
-        <div class="bg-white rounded-2xl shadow-md border border-orange-100 overflow-hidden relative">
-            <div class="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl shadow-sm">
-                强烈推荐
-            </div>
-            <div class="p-5">
-                <div class="flex items-center space-x-3">
-                    <span class="text-3xl">🍗</span>
-                    <div>
-                        <h2 class="text-lg font-bold text-gray-800">大牌外卖·天天免费吃</h2>
-                        <p class="text-xs text-gray-400 mt-0.5">满减叠加返现，四舍五入不要钱</p>
-                    </div>
-                </div>
-                <div class="flex space-x-2 mt-3">
-                    <span class="bg-orange-50 text-orange-600 text-[10px] font-semibold px-2 py-0.5 rounded">0元吃大餐</span>
-                    <span class="bg-orange-50 text-orange-600 text-[10px] font-semibold px-2 py-0.5 rounded">涵盖长沙全城</span>
-                </div>
-                <a href="#" class="mt-4 block text-center bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-3 rounded-xl shadow-md hover:opacity-95 transition-all text-sm">
-                    👉 点我立刻报名霸王餐
-                </a>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-2xl shadow-md border border-yellow-100 overflow-hidden">
-            <div class="p-5">
-                <div class="flex items-center space-x-3">
-                    <span class="text-3xl">🛵</span>
-                    <div>
-                        <h2 class="text-lg font-bold text-gray-800">美团外卖·天天领大额红包</h2>
-                        <p class="text-xs text-gray-400 mt-0.5">无门槛大额神券，最高可领 66 元</p>
-                    </div>
-                </div>
-                <div class="flex space-x-2 mt-3">
-                    <span class="bg-yellow-50 text-yellow-600 text-[10px] font-semibold px-2 py-0.5 rounded">每日可领一次</span>
-                    <span class="bg-yellow-50 text-yellow-600 text-[10px] font-semibold px-2 py-0.5 rounded">大牌商家通用</span>
-                </div>
-                <a href="#" class="mt-4 block text-center bg-yellow-400 text-gray-900 font-bold py-3 rounded-xl shadow-md hover:bg-yellow-500 transition-all text-sm">
-                    💰 点我领取美团神券
-                </a>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-2xl shadow-md border border-blue-100 overflow-hidden">
-            <div class="p-5">
-                <div class="flex items-center space-x-3">
-                    <span class="text-3xl">💙</span>
-                    <div>
-                        <h2 class="text-lg font-bold text-gray-800">饿了么·爆爆专属红包</h2>
-                        <p class="text-xs text-gray-400 mt-0.5">下午茶、深夜烧烤超大额补贴</p>
-                    </div>
-                </div>
-                <div class="flex space-x-2 mt-3">
-                    <span class="bg-blue-50 text-blue-600 text-[10px] font-semibold px-2 py-0.5 rounded">奶茶减10元</span>
-                    <span class="bg-blue-50 text-blue-600 text-[10px] font-semibold px-2 py-0.5 rounded">大额满减叠加</span>
-                </div>
-                <a href="#" class="mt-4 block text-center bg-blue-500 text-white font-bold py-3 rounded-xl shadow-md hover:bg-blue-600 transition-all text-sm">
-                    🚀 点我领取饿了么神券
-                </a>
-            </div>
-        </div>
-
-        <div class="bg-gray-100 rounded-xl p-4 text-[11px] text-gray-500 space-y-1">
-            <p class="font-semibold text-gray-700">💡 铁子们注意：</p>
-            <p>1. 霸王餐请务必【先在平台报名】，再跳转到外卖软件下单，否则无法返现！</p>
-            <p>2. 点单后记得按照商家要求拍照点评，动动手指，这顿饭钱就退回口袋了！</p>
-        </div>
-
+    <div class="form-group">
+        <label>专属轮毂/外观选配</label>
+        <select id="wheel" onchange="calculate()"></select>
     </div>
+
+    <div class="row">
+        <div class="form-group">
+            <label>报废/置换政策</label>
+            <select id="tradeIn" onchange="calculate()">
+                <option value="0">新购（无置换）</option>
+                <option value="5000">本品/他品置换 (-5,000元)</option>
+                <option value="10000">国家报废更新 (-10,000元)</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>店端现金减免 (元)</label>
+            <input type="number" id="cashReduction" value="0" placeholder="限时下定抵扣" oninput="calculate()">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group">
+            <label>保险预估 (元)</label>
+            <input type="number" id="insurance" value="5500" oninput="calculate()">
+        </div>
+        <div class="form-group">
+            <label>上牌综合费 (元)</label>
+            <input type="number" id="regFee" value="500" oninput="calculate()">
+        </div>
+    </div>
+
+    <button onclick="calculate()">生成实战落地价</button>
+
+    <div class="result-box" id="resultBox">
+        <h3>📊 购车财务看板</h3>
+        <div class="result-row">
+            <span>官方指导价：</span>
+            <span id="resOfficialPrice">0 元</span>
+        </div>
+        <div class="result-row">
+            <span>专属选配加成：</span>
+            <span>+ <span id="resOptionPrice">0</span> 元</span>
+        </div>
+        <div class="result-row">
+            <span>综合优惠减免：</span>
+            <span class="danger">- <span id="resDiscount">0</span> 元</span>
+        </div>
+        <div class="result-row" style="background: rgba(255, 90, 95, 0.1); padding: 8px; border-radius: 6px;">
+            <span>【裸车开票价】：</span>
+            <span class="danger" id="resBarePrice">0 元</span>
+        </div>
+        
+        <div class="result-row" style="margin-top: 10px;">
+            <span>保险及上牌费：</span>
+            <span>+ <span id="resFees">0</span> 元</span>
+        </div>
+        <div class="result-row">
+            <span>购置税 (26年新规)：</span>
+            <span>+ <span class="danger" id="resTax">0</span> 元</span>
+        </div>
+        <span class="tax-tip">*(减半征收，超免税额度部分实缴)*</span>
+        
+        <div class="result-row" style="background: rgba(0,191,179,0.15); padding: 15px 10px; border-radius: 8px; margin-top: 15px;">
+            <span style="font-weight: bold; line-height: 28px;">全款落地总价预估：</span>
+            <span class="highlight" id="resTotalPrice" style="font-size: 24px;">0 元</span>
+        </div>
+    </div>
+</div>
+
+<script>
+// 核心数据库：已完美修正 P7N 的四驱售价逻辑
+const vehicleData = {
+    m03: [
+        { name: "540 长续航 Plus", price: 119800 },
+        { name: "510 长续航 Max", price: 129800 },
+        { name: "640 超长续航 Plus", price: 129800 },
+        { name: "610 超长续航 Max", price: 139800 },
+        { name: "510 长续航 Ultra SE", price: 141800 },
+        { name: "610 超长续航 Ultra SE", price: 151800 }
+    ],
+    p7n: [
+        { name: "702 Max (后驱)", price: 203800 },
+        { name: "820 Max (后驱)", price: 223800 },
+        { name: "750 四驱 Max (双电机)", price: 243800 },
+        { name: "750 四驱鹏翼 Ultra", price: 301800 }
+    ],
+    p7plus: [
+        { name: "615 Max 旗舰版 (纯电)", price: 186800 },
+        { name: "725 Max 旗舰版 (纯电)", price: 196800 },
+        { name: "1550 Max 科技版 (增程)", price: 186900 },
+        { name: "1550 Max 旗舰版 (增程)", price: 196800 }
+    ],
+    g7: [
+        { name: "602 Max 旗舰版 (纯电)", price: 195800 },
+        { name: "702 Max 旗舰版 (纯电)", price: 205800 },
+        { name: "1704 Max 科技版 (增程)", price: 195800 },
+        { name: "1704 Max 旗舰版 (增程)", price: 205800 }
+    ],
+    g6: [
+        { name: "625 Max 科技版 (纯电)", price: 176800 },
+        { name: "625 Max 旗舰版 (纯电)", price: 186800 },
+        { name: "1704 Max (增程版)", price: 186800 }
+    ],
+    x9_ev: [
+        { name: "665 Max", price: 309800 },
+        { name: "650 Ultra SE", price: 321800 },
+        { name: "650 Ultra", price: 329800 },
+        { name: "750 Ultra", price: 349800 },
+        { name: "710 四驱 Ultra", price: 369800 } 
+    ],
+    x9_range: [
+        { name: "1602 Max", price: 309800 },
+        { name: "1602 Ultra SE", price: 321800 },
+        { name: "1602 Ultra", price: 329800 }
+    ]
+};
+
+// 轮毂及配件专属选装库
+const wheelData = {
+    p7n: [
+        { name: "标配 20寸低风阻轮毂", price: 0 },
+        { name: "选装 21寸锻造运动轮毂", price: 8000 }
+    ],
+    p7plus: [
+        { name: "标配 19寸轮毂", price: 0 },
+        { name: "选装 20寸轮毂", price: 6000 }
+    ],
+    x9_ev: [
+        { name: "标配 19寸星芒轮毂", price: 0 },
+        { name: "选装 20寸轮毂", price: 8000 }
+    ],
+    x9_range: [
+        { name: "标配 19寸星芒轮毂", price: 0 },
+        { name: "选装 20寸轮毂", price: 8000 }
+    ],
+    default: [
+        { name: "标配原厂轮毂/外观", price: 0 },
+        { name: "其他付费选装包", price: 6000 }
+    ]
+};
+
+function updateVersion() {
+    const vehicleSelect = document.getElementById("vehicle").value;
+    
+    // 1. 刷新配置列表
+    const versionSelect = document.getElementById("version");
+    versionSelect.innerHTML = ""; 
+    vehicleData[vehicleSelect].forEach((item) => {
+        let opt = document.createElement("option");
+        opt.value = item.price;
+        opt.innerText = `${item.name} (${item.price.toLocaleString()}元)`;
+        versionSelect.appendChild(opt);
+    });
+
+    // 2. 刷新专属轮毂逻辑
+    const wheelSelect = document.getElementById("wheel");
+    wheelSelect.innerHTML = "";
+    const wheels = wheelData[vehicleSelect] || wheelData["default"];
+    wheels.forEach((item) => {
+        let opt = document.createElement("option");
+        opt.value = item.price;
+        opt.innerText = `${item.name} (+${item.price.toLocaleString()}元)`;
+        wheelSelect.appendChild(opt);
+    });
+
+    calculate();
+}
+
+// 默认初始化
+updateVersion();
+
+function calculate() {
+    const officialPrice = parseInt(document.getElementById("version").value) || 0;
+    const wheelPrice = parseInt(document.getElementById("wheel").value) || 0;
+    const tradeInDiscount = parseInt(document.getElementById("tradeIn").value) || 0;
+    const cashReduction = parseInt(document.getElementById("cashReduction").value) || 0;
+    const insurancePrice = parseInt(document.getElementById("insurance").value) || 0;
+    const regFee = parseInt(document.getElementById("regFee").value) || 0;
+
+    const optionTotal = wheelPrice;
+    const discountTotal = tradeInDiscount + cashReduction;
+    
+    const barePrice = Math.max(0, officialPrice + optionTotal - discountTotal);
+    
+    // 购置税核心引擎
+    const taxBase = barePrice / 1.13;
+    const normalTax = taxBase * 0.10;
+    const taxReduction = Math.min(normalTax * 0.5, 15000); 
+    const taxPrice = Math.max(0, Math.round(normalTax - taxReduction)); 
+
+    const totalPrice = barePrice + taxPrice + insurancePrice + regFee;
+
+    document.getElementById("resOfficialPrice").innerText = officialPrice.toLocaleString() + " 元";
+    document.getElementById("resOptionPrice").innerText = optionTotal.toLocaleString();
+    document.getElementById("resDiscount").innerText = discountTotal.toLocaleString();
+    document.getElementById("resBarePrice").innerText = barePrice.toLocaleString() + " 元";
+    document.getElementById("resFees").innerText = (insurancePrice + regFee).toLocaleString();
+    document.getElementById("resTax").innerText = taxPrice.toLocaleString();
+    document.getElementById("resTotalPrice").innerText = totalPrice.toLocaleString() + " 元";
+    
+    document.getElementById("resultBox").style.display = "block";
+}
+</script>
 </body>
 </html>
